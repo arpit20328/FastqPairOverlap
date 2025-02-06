@@ -1,8 +1,10 @@
 import argparse
 from Bio import SeqIO
+import gzip
 
 def parse_fastq(file1, file2):
-    with open(file1, "r") as f1, open(file2, "r") as f2:
+    open_func = gzip.open if file1.endswith('.gz') else open
+    with open_func(file1, "rt") as f1, open_func(file2, "rt") as f2:
         for record1, record2 in zip(SeqIO.parse(f1, "fastq"), SeqIO.parse(f2, "fastq")):
             print("File 1:", record1.id, record1.seq, record1.letter_annotations["phred_quality"])
             print("File 2:", record2.id, record2.seq, record2.letter_annotations["phred_quality"])
